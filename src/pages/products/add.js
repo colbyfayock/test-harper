@@ -38,8 +38,8 @@ export default function Dashboard() {
               <input type="text" name="title" />
             </FormRow>
             <FormRow>
-              <label>ID</label>
-              <input type="text" name="id" />
+              <label>Sku</label>
+              <input type="text" name="sku" />
             </FormRow>
             <FormRow>
               <label>Price</label>

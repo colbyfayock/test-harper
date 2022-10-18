@@ -34,7 +34,7 @@ export default function Dashboard({ products }) {
           <ul className={styles.products}>
             {products.map(product => {
               return (
-                <li key={product.id}>
+                <li key={product.sku}>
                   <a href={product.url} rel="noopener noreferrer">
                     <Image width="600" height="600" src={product.image} alt="" />
                   </a>
@@ -45,8 +45,8 @@ export default function Dashboard({ products }) {
                     ${ product.price }
                   </p>
                   <p className={styles.productActions}>
-                    <Button href={`/product/update?${Object.keys(product).map(key => `${key}=${product[key]}`).join('&')}`}>Update Product</Button>
-                    <Button color="red" href={`/product/delete?id=${product.id}&title=${product.title}`}>Delete Product</Button>
+                    <Button href={`/products/update?${Object.keys(product).map(key => `${key}=${product[key]}`).join('&')}`}>Update Product</Button>
+                    <Button color="red" href={`/products/delete?sku=${product.sku}&title=${product.title}`}>Delete Product</Button>
                   </p>
                 </li>
               )
@@ -63,25 +63,25 @@ export async function getServerSideProps() {
     props: {
       products: [
         {
-          id: '1',
+          sku: '1',
           title: 'Cosmo Hat',
           image: '/images/cosmo-hat.jpg',
           price: '5.00'
         },
         {
-          id: '2',
+          sku: '2',
           title: 'Cosmo Hat',
           image: '/images/cosmo-hat.jpg',
           price: '5.00'
         },
         {
-          id: '3',
+          sku: '3',
           title: 'Cosmo Hat',
           image: '/images/cosmo-hat.jpg',
           price: '5.00'
         },
         {
-          id: '4',
+          sku: '4',
           title: 'Cosmo Hat',
           image: '/images/cosmo-hat.jpg',
           price: '5.00'

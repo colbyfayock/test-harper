@@ -41,8 +41,8 @@ export default function Dashboard() {
               <input type="text" name="title" defaultValue={query.title} />
             </FormRow>
             <FormRow>
-              <label>ID</label>
-              <input type="text" name="id"  defaultValue={query.id} />
+              <label>Sku</label>
+              <input type="text" name="sku"  defaultValue={query.sku} />
             </FormRow>
             <FormRow>
               <label>Price</label>

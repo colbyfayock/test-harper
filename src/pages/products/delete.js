@@ -11,7 +11,7 @@ export default function Dashboard() {
   const { query } = useRouter();
 
   function handleOnDelete() {
-    alert(`Delete ${query.id}!`);
+    alert(`Delete ${query.sku}!`);
   }
 
   return (
