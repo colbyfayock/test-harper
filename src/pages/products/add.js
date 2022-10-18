@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import Layout from '@components/Layout';
 import Section from '@components/Section';
@@ -9,7 +10,9 @@ import Form from '@components/Form';
 import FormRow from '@components/FormRow';
 
 export default function Dashboard() {
-  function handleOnAdd(e) {
+  const router = useRouter();
+
+  async function handleOnAdd(e) {
     e.preventDefault();
 
     const fields = Array.from(e.currentTarget.elements);
@@ -18,7 +21,14 @@ export default function Dashboard() {
       return prev;
     }, {});
 
-    alert(`Add ${product.title}!`);
+    const results = await fetch('/api/products/add', {
+      method: 'POST',
+      body: JSON.stringify(product)
+    }).then(r => r.json())
+
+    if ( results.data.id ) {
+      router.push(`/`);
+    }
   }
 
   return (

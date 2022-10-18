@@ -8,10 +8,19 @@ import Container from '@components/Container';
 import Button from '@components/Button';
 
 export default function Dashboard() {
-  const { query } = useRouter();
+  const router = useRouter();
 
-  function handleOnDelete() {
-    alert(`Delete ${query.sku}!`);
+  async function handleOnDelete() {
+    const results = await fetch('/api/products/delete', {
+      method: 'POST',
+      body: JSON.stringify({
+        id: router.query.id
+      })
+    }).then(r => r.json())
+
+    if ( results.data.id ) {
+      router.push(`/`);
+    }
   }
 
   return (
@@ -25,7 +34,7 @@ export default function Dashboard() {
       <Section>
         <Container>
           <h1>Delete Product</h1>
-          <h2>Are you sure you want to delete <strong>{ query.title }</strong>?</h2>
+          <h2>Are you sure you want to delete <strong>{ router.query.title }</strong>?</h2>
           <Button color="red" onClick={handleOnDelete}>Delete</Button>
         </Container>
       </Section>

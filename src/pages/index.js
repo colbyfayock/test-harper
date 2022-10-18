@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import useSWR from 'swr'
+
 
 import Layout from '@components/Layout';
 import Section from '@components/Section';
@@ -9,8 +12,13 @@ import Button from '@components/Button';
 
 import styles from '../styles/Home.module.scss';
 
-export default function Dashboard({ products }) {
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
+export default function Dashboard() {
   const router = useRouter();
+  const { data = {}, error } = useSWR('/api/products', fetcher)
+  const { products } = data;
+
   return (
     <Layout>
       <Head>
@@ -23,7 +31,7 @@ export default function Dashboard({ products }) {
 
       <Section>
         <Container className={styles.actionsContainer}>
-          <Button>Add Product</Button>
+          <Button href="/products/add">Add Product</Button>
         </Container>
       </Section>
 
@@ -32,7 +40,8 @@ export default function Dashboard({ products }) {
           <h2 className={styles.heading}>Products</h2>
 
           <ul className={styles.products}>
-            {products.map(product => {
+            {Array.isArray(products) && products.map(product => {
+              const paramsString = Object.keys(product).map(key => `${key}=${product[key]}`).join('&');
               return (
                 <li key={product.sku}>
                   <a href={product.url} rel="noopener noreferrer">
@@ -45,8 +54,8 @@ export default function Dashboard({ products }) {
                     ${ product.price }
                   </p>
                   <p className={styles.productActions}>
-                    <Button href={`/products/update?${Object.keys(product).map(key => `${key}=${product[key]}`).join('&')}`}>Update Product</Button>
-                    <Button color="red" href={`/products/delete?sku=${product.sku}&title=${product.title}`}>Delete Product</Button>
+                    <Button href={`/products/update?${paramsString}`}>Update Product</Button>
+                    <Button color="red" href={`/products/delete?${paramsString}`}>Delete Product</Button>
                   </p>
                 </li>
               )
@@ -56,37 +65,4 @@ export default function Dashboard({ products }) {
       </Section>
     </Layout>
   )
-}
-
-export async function getServerSideProps() {
-  return {
-    props: {
-      products: [
-        {
-          sku: '1',
-          title: 'Cosmo Hat',
-          image: '/images/cosmo-hat.jpg',
-          price: '5.00'
-        },
-        {
-          sku: '2',
-          title: 'Cosmo Hat',
-          image: '/images/cosmo-hat.jpg',
-          price: '5.00'
-        },
-        {
-          sku: '3',
-          title: 'Cosmo Hat',
-          image: '/images/cosmo-hat.jpg',
-          price: '5.00'
-        },
-        {
-          sku: '4',
-          title: 'Cosmo Hat',
-          image: '/images/cosmo-hat.jpg',
-          price: '5.00'
-        },
-    ]
-    }
-  }
 }

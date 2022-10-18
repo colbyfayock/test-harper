@@ -10,9 +10,9 @@ import Form from '@components/Form';
 import FormRow from '@components/FormRow';
 
 export default function Dashboard() {
-  const { query } = useRouter();
+  const router = useRouter();
 
-  function handleOnUpdate(e) {
+  async function handleOnUpdate(e) {
     e.preventDefault();
 
     const fields = Array.from(e.currentTarget.elements);
@@ -21,7 +21,17 @@ export default function Dashboard() {
       return prev;
     }, {});
 
-    alert(`Update ${product.title}!`);
+    const results = await fetch('/api/products/update', {
+      method: 'POST',
+      body: JSON.stringify({
+        id: router.query.id,
+        ...product
+      })
+    }).then(r => r.json())
+
+    if ( results.data.id ) {
+      router.push(`/`);
+    }
   }
 
   return (
@@ -34,23 +44,23 @@ export default function Dashboard() {
 
       <Section>
         <Container>
-          <h1>Update { query.title }</h1>
+          <h1>Update { router.query.title }</h1>
           <Form onSubmit={handleOnUpdate}>
             <FormRow>
               <label>Title</label>
-              <input type="text" name="title" defaultValue={query.title} />
+              <input type="text" name="title" defaultValue={router.query.title} />
             </FormRow>
             <FormRow>
               <label>Sku</label>
-              <input type="text" name="sku"  defaultValue={query.sku} />
+              <input type="text" name="sku"  defaultValue={router.query.sku} />
             </FormRow>
             <FormRow>
               <label>Price</label>
-              <input type="text" name="price"  defaultValue={query.price} />
+              <input type="text" name="price"  defaultValue={router.query.price} />
             </FormRow>
             <FormRow>
               <label>Image</label>
-              <input type="text" name="image"  defaultValue={query.image} />
+              <input type="text" name="image"  defaultValue={router.query.image} />
             </FormRow>
             <FormRow>
               <Button type="submit">Update Product</Button>
